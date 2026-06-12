@@ -1,75 +1,104 @@
-// ==========================================================
-// NAVBAR: toggle menu mobile
-// ==========================================================
-const navToggle = document.getElementById('navToggle');
-const navLinks = document.getElementById('navLinks');
+// ================= MOBILE NAVBAR =================
 
-navToggle.addEventListener('click', () => {
-  navLinks.classList.toggle('open');
+const menuToggle = document.getElementById("menuToggle");
+const navLinks = document.getElementById("navLinks");
+
+menuToggle.addEventListener("click", () => {
+  navLinks.classList.toggle("active");
 });
 
-// Tutup menu saat link diklik (mobile)
-navLinks.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => {
-    navLinks.classList.remove('open');
+// Tutup menu setelah klik link
+
+document.querySelectorAll(".nav-links a").forEach(link => {
+  link.addEventListener("click", () => {
+    navLinks.classList.remove("active");
   });
 });
 
-// ==========================================================
-// NAVBAR: efek shadow saat scroll
-// ==========================================================
-const navbar = document.getElementById('navbar');
+// ================= NAVBAR SHADOW =================
 
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 10) {
-    navbar.style.boxShadow = '0 1px 0 rgba(26,26,46,0.06)';
+const navbar = document.getElementById("navbar");
+
+window.addEventListener("scroll", () => {
+
+  if(window.scrollY > 10){
+    navbar.style.boxShadow = "0 10px 30px rgba(0,0,0,0.05)";
   } else {
-    navbar.style.boxShadow = 'none';
-  }
-});
-
-// ==========================================================
-// FORM KONTAK: validasi sederhana + feedback (tanpa backend)
-// ==========================================================
-const contactForm = document.getElementById('contactForm');
-const formNote = document.getElementById('formNote');
-
-contactForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-
-  const name = document.getElementById('name').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const message = document.getElementById('message').value.trim();
-
-  if (!name || !email || !message) {
-    formNote.textContent = 'Mohon lengkapi semua field sebelum mengirim.';
-    formNote.style.color = '#e0524d';
-    return;
+    navbar.style.boxShadow = "none";
   }
 
-  // Simulasi pengiriman pesan (karena tidak ada backend)
-  formNote.textContent = `Terima kasih, ${name}! Pesan Anda telah diterima.`;
-  formNote.style.color = '#5B5FEF';
-  contactForm.reset();
 });
 
-// ==========================================================
-// ANIMASI: progress bar skill muncul saat di-scroll ke view
-// ==========================================================
-const bars = document.querySelectorAll('.bar-fill');
+// ================= SKILL ANIMATION =================
+
+const fills = document.querySelectorAll(".progress-fill");
 
 const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const width = entry.target.style.width;
-      entry.target.style.width = '0';
-      requestAnimationFrame(() => {
-        entry.target.style.transition = 'width 0.8s ease';
-        entry.target.style.width = width;
-      });
-      observer.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.4 });
 
-bars.forEach(bar => observer.observe(bar));
+  entries.forEach(entry => {
+
+    if(entry.isIntersecting){
+
+      const fill = entry.target;
+      const width = fill.dataset.width;
+
+      fill.style.width = width;
+
+      observer.unobserve(fill);
+    }
+
+  });
+
+}, {
+  threshold: 0.5
+});
+
+fills.forEach(fill => {
+  observer.observe(fill);
+});
+
+// ================= CONTACT FORM =================
+
+const contactForm = document.getElementById("contactForm");
+const formMessage = document.getElementById("formMessage");
+
+contactForm.addEventListener("submit", function(e){
+
+  e.preventDefault();
+
+  const name = document.getElementById("name").value;
+
+  formMessage.textContent =
+    `Terima kasih ${name}, pesan berhasil dikirim!`;
+
+  contactForm.reset();
+
+});
+
+// ================= FADE ANIMATION =================
+
+const fadeElements = document.querySelectorAll(
+  ".section-title, .skill-card, .project-card, .about-image, .about-content, .contact-info, .contact-form"
+);
+
+const fadeObserver = new IntersectionObserver((entries) => {
+
+  entries.forEach((entry) => {
+
+    if (entry.isIntersecting) {
+      entry.target.classList.add("show");
+    }
+
+  });
+
+}, {
+  threshold: 0.2
+});
+
+fadeElements.forEach((el) => {
+
+  el.classList.add("fade-up");
+
+  fadeObserver.observe(el);
+
+});
